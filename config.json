@@ -1,0 +1,26 @@
+{
+  "mode": "simulation",
+  "rpc": {
+    "mainnet": "https://api.mainnet-beta.solana.com",
+    "fallback": ["https://solana-api.projectserum.com"]
+  },
+  "scanner": {
+    "programs": {
+      "raydium": "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",
+      "orca": "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc"
+    }
+  },
+  "filters": {
+    "minLiquidityUSD": 5000,
+    "maxInitialMarketCap": 50000,
+    "minLiquidityLockPercent": 80,
+    "maxTaxPercent": 5,
+    "mustBeRenounced": true
+  },
+  "simulation": {
+    "initialBalance": 1000,
+    "maxPositionSize": 50,
+    "stopLossPercent": 30,
+    "takeProfitPercent": 100
+  }
+}

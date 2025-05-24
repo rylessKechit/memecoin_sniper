@@ -1,0 +1,39 @@
+{
+  "name": "memecoin-sniper",
+  "version": "1.0.0",
+  "description": "Bot de snipe pour memecoins Solana avec mode simulation",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/data-collector.ts",
+    "collect": "ts-node src/data-collector.ts",
+    "collect:live": "ts-node src/data-collector.ts --live",
+    "collect:quick": "ts-node src/quick-collector.ts",
+    "collect:improved": "ts-node src/improved-collector.ts",
+    "collect:raydium": "ts-node src/raydium-collector.ts",
+    "collect:working": "ts-node src/working-collector.ts",
+    "simulate:improved": "ts-node src/improved-simulator.ts",
+    "reset:db": "psql -d memecoin_bot -c 'DROP TABLE IF EXISTS token_launches, token_metadata, price_history CASCADE;'",
+    "analyze": "ts-node src/analyzer.ts",
+    "fix:prices": "ts-node src/fix-price-history.ts",
+    "simulate": "ts-node src/simulator.ts",
+    "stats": "ts-node src/stats.ts",
+    "db:init": "ts-node scripts/init-db.ts",
+    "db:reset": "ts-node scripts/reset-db.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.87.6",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.3",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.50",
+    "@types/pg": "^8.15.2",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
