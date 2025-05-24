@@ -1,39 +1,64 @@
 {
-  "name": "memecoin-sniper",
-  "version": "1.0.0",
-  "description": "Bot de snipe pour memecoins Solana avec mode simulation",
-  "main": "dist/index.js",
+  "name": "memecoin-bot-scalable",
+  "version": "3.0.0",
+  "description": "Bot de trading memecoin modulaire avec vraies données",
+  "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node src/data-collector.ts",
-    "collect": "ts-node src/data-collector.ts",
-    "collect:live": "ts-node src/data-collector.ts --live",
-    "collect:quick": "ts-node src/quick-collector.ts",
-    "collect:improved": "ts-node src/improved-collector.ts",
-    "collect:raydium": "ts-node src/raydium-collector.ts",
-    "collect:working": "ts-node src/working-collector.ts",
-    "simulate:improved": "ts-node src/improved-simulator.ts",
-    "reset:db": "psql -d memecoin_bot -c 'DROP TABLE IF EXISTS token_launches, token_metadata, price_history CASCADE;'",
-    "analyze": "ts-node src/analyzer.ts",
-    "fix:prices": "ts-node src/fix-price-history.ts",
-    "simulate": "ts-node src/simulator.ts",
-    "stats": "ts-node src/stats.ts",
-    "db:init": "ts-node scripts/init-db.ts",
-    "db:reset": "ts-node scripts/reset-db.ts"
+    "dev": "ts-node src/main.ts",
+    "start": "node dist/main.js",
+    
+    "test:types": "ts-node test-types.ts",
+    "collect": "ts-node scripts/collect-data.ts",
+    "backtest": "ts-node scripts/run-backtest.ts",
+    "analyze": "ts-node scripts/analyze-performance.ts",
+    
+    "db:init": "node init.js",
+    "db:stats": "ts-node -e \"const {db} = require('./src/database/connection'); const {DatabaseSchema} = require('./src/database/schema'); async function run() { const schema = new DatabaseSchema(); const stats = await schema.getTableStats(); console.log(stats); await db.close(); } run().catch(console.error);\"",
+    "db:vacuum": "ts-node -e \"import('./src/database/schema').then(m => new m.DatabaseSchema().vacuum())\"",
+    
+    "test:birdeye": "ts-node -e \"import('./src/collectors/birdeye').then(m => { const c = new m.BirdeyeCollector({enabled: true, rateLimit: 1, retryAttempts: 3, timeout: 10000}); c.fetchTokens(5).then(console.log); })\"",
+    "test:dexscreener": "ts-node -e \"import('./src/collectors/dexscreener').then(m => { const c = new m.DexScreenerCollector({enabled: true, rateLimit: 1, retryAttempts: 3, timeout: 10000}); c.fetchTokens(5).then(console.log); })\"",
+    
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "type-check": "tsc --noEmit",
+    
+    "logs:error": "tail -f logs/error.log",
+    "logs:combined": "tail -f logs/combined.log",
+    "logs:clear": "rm -rf logs/*.log"
   },
   "dependencies": {
     "@solana/web3.js": "^1.87.6",
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
-    "node-cron": "^3.0.3",
     "pg": "^8.11.3",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "sql.js": "^1.8.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.50",
     "@types/pg": "^8.15.2",
+    "@types/better-sqlite3": "^7.6.8",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "memecoin",
+    "trading",
+    "bot",
+    "solana",
+    "cryptocurrency",
+    "defi",
+    "backtest"
+  ],
+  "author": "Memecoin Bot Team",
+  "license": "MIT"
 }
